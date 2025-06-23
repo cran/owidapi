@@ -24,35 +24,39 @@ owid_get_catalog <- function(
 
   tryCatch(
     {
-      resp <- req |>
-        req_user_agent(
-          "owidapi R package (https://github.com/tidy-intelligence/r-owidapi)"
-        ) |>
-        req_perform()
+      resp <- perform_request(req, "owid_get_catalog")
+
+      catalog_raw <- resp |>
+        resp_body_string() |>
+        textConnection() |>
+        read.csv() |>
+        tibble::as_tibble()
+
+      # Parse logicals
+      catalog_raw$isInheritanceEnabled <- catalog_raw$isInheritanceEnabled ==
+        "True"
+      catalog_raw$isIndexable <- catalog_raw$isIndexable == "True"
+      catalog_raw$isPublished <- catalog_raw$isPublished == "True"
+
+      # Parse dates
+      catalog_raw$createdAt <- as.Date(catalog_raw$createdAt)
+      catalog_raw$updatedAt <- as.Date(catalog_raw$updatedAt)
+      catalog_raw$lastEditedAt <- as.Date(catalog_raw$lastEditedAt)
+      catalog_raw$publishedAt <- as.Date(catalog_raw$publishedAt)
+
+      if (snake_case) {
+        catalog <- to_snake_case(catalog_raw)
+      } else {
+        catalog <- catalog_raw
+      }
+
+      catalog
     },
     error = function(e) {
-      cli::cli_abort(
-        c(
-          "Failed to retrieve data from Our World in Data.",
-          "i" = "Error message: {conditionMessage(e)}",
-          "i" = "Check your internet connection and the dataset or URL."
-        ),
-        call = call("owid_get_catalog")
+      cli_alert(
+        conditionMessage(e)
       )
+      invisible(NULL)
     }
   )
-
-  catalog_raw <- resp |>
-    resp_body_string() |>
-    textConnection() |>
-    read.csv() |>
-    tibble::as_tibble()
-
-  if (snake_case) {
-    catalog <- to_snake_case(catalog_raw)
-  } else {
-    catalog <- catalog_raw
-  }
-
-  catalog
 }

@@ -1,6 +1,6 @@
 Package: owidapi
 Title: Access the Our World in Data Chart API
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Christoph", "Scheuch", , "christoph@tidy-intelligence.com", 
             role = c("aut", "cre", "cph"),
@@ -22,9 +22,9 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2025-02-27 07:52:57 UTC; krise
-Author: Christoph Scheuch [aut, cre, cph]
-    (<https://orcid.org/0009-0004-0423-6819>)
+Packaged: 2025-06-23 14:25:20 UTC; krise
+Author: Christoph Scheuch [aut, cre, cph] (ORCID:
+    <https://orcid.org/0009-0004-0423-6819>)
 Maintainer: Christoph Scheuch <christoph@tidy-intelligence.com>
 Repository: CRAN
-Date/Publication: 2025-02-27 17:10:02 UTC
+Date/Publication: 2025-06-23 14:50:01 UTC
